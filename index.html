@@ -197,36 +197,44 @@
     'ad5.mp3': 'Yari Yariya'
   };
 
-  // Функция создания плейлиста с рекламой каждые 5 треков
+  // Функция создания плейлиста с рекламой после каждого трека, кроме последнего
   function createPlaylist() {
     const newPlaylist = [];
     let adIndex = 0;
+
     for (let i = 0; i < musics.length; i++) {
       newPlaylist.push(musics[i]);
-      if ((i + 1) % 5 === 0 && i !== musics.length - 1) {
+
+      if (i !== musics.length - 1) {
         newPlaylist.push(ads[adIndex]);
         adIndex = (adIndex + 1) % ads.length;
       }
     }
+
     return newPlaylist;
   }
 
-  // Функция создания перемешанного плейлиста с рекламой
+  // Функция создания перемешанного плейлиста с рекламой после каждого трека, кроме последнего
   function createShuffledPlaylist() {
     const shuffledMusics = [...musics];
+
     for (let i = shuffledMusics.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffledMusics[i], shuffledMusics[j]] = [shuffledMusics[j], shuffledMusics[i]];
     }
+
     const newPlaylist = [];
     let adIndex = 0;
+
     for (let i = 0; i < shuffledMusics.length; i++) {
       newPlaylist.push(shuffledMusics[i]);
-      if ((i + 1) % 5 === 0 && i !== shuffledMusics.length - 1) {
+
+      if (i !== shuffledMusics.length - 1) {
         newPlaylist.push(ads[adIndex]);
         adIndex = (adIndex + 1) % ads.length;
       }
     }
+
     return newPlaylist;
   }
 
@@ -268,13 +276,13 @@
   function playTrack() {
     player.play();
     isPlaying = true;
-    playPauseBtn.innerHTML = '&#10073;&#10073;'; // || пауза
+    playPauseBtn.innerHTML = '&#10073;&#10073;';
   }
 
   function pauseTrack() {
     player.pause();
     isPlaying = false;
-    playPauseBtn.innerHTML = '&#9658;'; // ► плей
+    playPauseBtn.innerHTML = '&#9658;';
   }
 
   function togglePlayPause() {
@@ -312,23 +320,21 @@
     playTrack();
   }
 
-  // Обновление прогресс-бара и таймера
   function updateProgress() {
     if (player.duration) {
       const progressPercent = (player.currentTime / player.duration) * 100;
       progressBar.style.width = `${progressPercent}%`;
 
-      // Формат времени mm:ss
       function formatTime(time) {
         const m = Math.floor(time / 60);
         const s = Math.floor(time % 60);
         return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
       }
+
       timer.textContent = `${formatTime(player.currentTime)} / ${formatTime(player.duration)}`;
     }
   }
 
-  // Клик по прогрессу для перемотки
   progressContainer.addEventListener('click', (e) => {
     const rect = progressContainer.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
@@ -337,7 +343,6 @@
     player.currentTime = newTime;
   });
 
-  // События
   playPauseBtn.addEventListener('click', togglePlayPause);
   prevBtn.addEventListener('click', prevTrack);
   nextBtn.addEventListener('click', nextTrack);
@@ -347,13 +352,8 @@
   player.addEventListener('timeupdate', updateProgress);
   player.addEventListener('ended', nextTrack);
 
-  // Инициализация
   loadTrack(0);
 </script>
 
 </body>
 </html>
-
-
-
-
